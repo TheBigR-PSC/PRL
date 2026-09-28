@@ -1,7 +1,7 @@
 """
 Entraînement VMC pour l'ansatz LogStateVector (Poids par configuration)
 sur différents Hamiltoniens de spin 1D (TFIM, Heisenberg, XXZ, J1-J2, TFLI),
-avec comparaison des métriques (écart relatif et V-score) sur un même graphe.
+avec comparaison des métriques (écart relatif et V-score) sur un même graphe (Colormap: Magma).
 
 Note physique sur la règle de signe de Marshall :
 Pour les modèles antiferromagnétiques (Heisenberg, XXZ, J1-J2), une transformation
@@ -47,7 +47,6 @@ def get_all_hamiltonians(hi, graph):
     )
     
     # 3. XXZ Anisotrope (Delta = 0.5) avec transformation de signe Marshall
-    # H = sum_i [ -(sx_i sx_{i+1} + sy_i sy_{i+1}) + Delta * sz_i sz_{i+1} ]
     Delta = 0.5
     hamiltonians["XXZ (Delta=0.5)"] = sum(
         -(sx(hi, i) * sx(hi, (i + 1) % N) + sy(hi, i) * sy(hi, (i + 1) % N))
@@ -124,13 +123,15 @@ for ham_name, ha in hamiltonians.items():
     }
 
 # ==============================================================================
-# 4. Tracé comparatif multi-Hamiltoniens sur une même figure
+# 4. Tracé comparatif multi-Hamiltoniens sur une même figure (Colormap: Magma)
 # ==============================================================================
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5.5))
+cmap = plt.get_cmap("magma")
+colors = [cmap(val) for val in np.linspace(0.15, 0.85, len(results))]
 
 # Graphe 1 : Écart relatif à l'état fondamental exact
-for ham_name, data in results.items():
-    ax1.plot(data["iters"], data["rel_err"], label=ham_name, lw=2)
+for (ham_name, data), col in zip(results.items(), colors):
+    ax1.plot(data["iters"], data["rel_err"], label=ham_name, lw=2, color=col)
 
 ax1.set_xlabel("Itération", fontsize=12)
 ax1.set_ylabel(r"Écart relatif $|(E - E_0) / E_0|$", fontsize=12)
@@ -140,8 +141,8 @@ ax1.grid(True, which="both", ls="--", alpha=0.5)
 ax1.legend(fontsize=9, loc="upper right")
 
 # Graphe 2 : V-score standard
-for ham_name, data in results.items():
-    ax2.plot(data["iters"], data["v_score"], label=ham_name, lw=2)
+for (ham_name, data), col in zip(results.items(), colors):
+    ax2.plot(data["iters"], data["v_score"], label=ham_name, lw=2, color=col)
 
 ax2.set_xlabel("Itération", fontsize=12)
 ax2.set_ylabel("V-score standard", fontsize=12)
