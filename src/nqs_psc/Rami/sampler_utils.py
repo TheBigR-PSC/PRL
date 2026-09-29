@@ -14,7 +14,7 @@ class GlobalFlipRule(nk.sampler.rules.MetropolisRule):
     Règle de transition Metropolis pour le retournement global simultané
     de tous les spins du système (sigma -> -sigma).
     Particulièrement utile pour les systèmes avec symétrie Z2 (Ising ferromagnétique).
-    """
+    """  
 
     def transition(self, sampler, machine, parameters, state, key, σ):
         # Inverse tous les spins simultanément

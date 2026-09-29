@@ -27,8 +27,8 @@ N_ITERS = 70   # Nombre d'itérations VMC par test
 H_VAL = 1.0    # Champ transverse h
 HAM_NAME = "TFIM 1D"
 ANSATZ_NAME = "LogStateVector"
-LR = 0.05
-DIAG_SHIFT = 0.01
+LR = 0.005
+DIAG_SHIFT = 0.001
 
 graph = nk.graph.Chain(length=L, pbc=True)
 hi = nk.hilbert.Spin(s=0.5, N=L)
